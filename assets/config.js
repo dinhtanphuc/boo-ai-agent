@@ -2,7 +2,7 @@
 // Đây là khóa CÔNG KHAI (anon hoặc publishable), để trong web là bình thường.
 // TUYỆT ĐỐI không dán service_role / secret key vào đây.
 window.CONFIG = {
-  SUPABASE_URL: "https://YOUR-PROJECT-ID.supabase.co",
-  SUPABASE_ANON_KEY: "YOUR-ANON-OR-PUBLISHABLE-KEY",
+  NEXT_PUBLIC_SUPABASE_URL=https://wullognzrgruzfzhmyww.supabase.co
+  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_Ge84nb0_GFZAFgkXNnm4GA_HPv5xA9I
   SITE_NAME: "Boo AI Agent",
 };
