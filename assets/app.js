@@ -135,6 +135,17 @@
   }
 
   function installStepsHtml(skill) {
+    if (skill.type === "plugin") {
+      const cmds = (skill.commands || [skill.command]).map((c) => `<code>${esc(c)}</code>`).join(" và ");
+      return `
+      <ol class="steps">
+        <li><b>Giữ nguyên file .zip</b> vừa tải (${esc(skill.id)}.zip), không giải nén. Đây là <b>plugin</b> gồm cả 2 skill.</li>
+        <li>Mở <b>ứng dụng Claude trên máy tính</b> (Claude Desktop) → vào <b>Cowork</b>.</li>
+        <li>Mở <b>Customize</b> (hoặc bấm <b>+</b> → <b>Add plugins</b>), bấm <b>+</b> → <b>Upload plugin</b> và chọn file .zip.</li>
+        <li>Claude Code: giải nén ra một thư mục rồi chạy <code>claude --plugin-dir &lt;thư mục đó&gt;</code>.</li>
+        <li>Dùng: gõ ${cmds} hoặc mô tả việc bạn muốn làm trong chat.</li>
+      </ol>`;
+    }
     return `
       <ol class="steps">
         <li><b>Giữ nguyên file .zip</b> vừa tải (${esc(skill.id)}.zip), không cần giải nén nếu dùng Claude.ai / Claude Desktop.</li>
