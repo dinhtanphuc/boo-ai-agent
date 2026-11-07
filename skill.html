@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<title>Chi tiết skill · Boo AI Agent</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23f5b83d'/><text x='50' y='70' font-size='62' text-anchor='middle' font-family='Arial' font-weight='900' fill='%231c1400'>B</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/style.css" />
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js"></script>
+<script src="assets/config.js"></script>
+<script src="assets/skills.js"></script>
+<script src="assets/app.js"></script>
+</head>
+<body>
+<header id="site-header"></header>
+<main class="wrap" id="main"></main>
+<footer id="site-footer"></footer>
+<script>
+(async function () {
+  const { renderChrome, getClaims, claim, handleClaimParam, esc, params, installStepsHtml } = App;
+  await renderChrome();
+  const id = params.get("id");
+  const s = SKILLS.find((x) => x.id === id);
+  const main = document.getElementById("main");
+  if (!s) {
+    main.innerHTML = '<div class="empty">Không tìm thấy skill. <a href="index.html">Về trang chủ</a></div>';
+    return;
+  }
+  document.title = s.title + " · Boo AI Agent";
+  let claims = await getClaims();
+  const returnTo = "skill.html?id=" + encodeURIComponent(s.id);
+
+  function render() {
+    const owned = claims.has(s.id);
+    main.innerHTML = `
+      <a class="back" href="index.html">← Tất cả skill</a>
+      <div class="detail">
+        <div>
+          <div class="cover"><img src="${esc(s.cover)}" alt="${esc(s.title)}" /></div>
+          <div class="panel" style="margin-top:22px">
+            <h2>Skill này làm được gì</h2>
+            <ul>${(s.features || []).map((f) => `<li>${esc(f)}</li>`).join("")}</ul>
+            ${s.note ? `<div class="note">${esc(s.note)}</div>` : ""}
+          </div>
+          <div class="panel">
+            <h2>Cách cài vào Claude</h2>
+            ${installStepsHtml(s)}
+          </div>
+        </div>
+        <aside class="sticky-side">
+          <div class="panel">
+            <div class="card-title"><h1>${esc(s.title)}</h1><span class="lang">${esc(s.lang || "")}</span></div>
+            <p style="color:var(--muted);margin:0 0 16px">${esc(s.short)}</p>
+            <div class="chips">${(s.tags || []).map((t) => `<span class="chip strong">${esc(t)}</span>`).join("")}
+              ${s.duration ? `<span class="chip">${esc(s.duration)}</span>` : ""}</div>
+            <p style="color:var(--muted);font-size:14px;margin:4px 0 18px">Dùng được trên: <b style="color:var(--text)">${esc(s.works || "Claude")}</b></p>
+            <button class="btn btn-primary btn-block" id="claim-btn">${owned ? "Tải lại skill" : "Nhận skill"}</button>
+            ${s.demo ? `<a class="btn btn-ghost btn-block" style="margin-top:10px" href="${esc(s.demo)}" target="_blank" rel="noopener">▶ Xem demo</a>` : ""}
+          </div>
+        </aside>
+      </div>`;
+    document.getElementById("claim-btn").onclick = () => claim(s.id, opts);
+  }
+  const opts = { returnTo, onClaimed: (x) => { claims.add(x); render(); } };
+  render();
+  handleClaimParam(opts);
+})();
+</script>
+</body>
+</html>

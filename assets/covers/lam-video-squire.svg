@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="640" height="360">
+  <defs>
+    <linearGradient id="sky2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5b6f86"/><stop offset="1" stop-color="#c9cdc2"/>
+    </linearGradient>
+    <g id="k">
+      <rect x="-30" y="22" width="60" height="58" rx="14" fill="#8d96a3" stroke="#2b1d14" stroke-width="5"/>
+      <circle cx="0" cy="0" r="34" fill="#fff" stroke="#2b1d14" stroke-width="5"/>
+      <path d="M-36 2 A36 36 0 0 1 36 2 L36 -2 L-36 -2 Z" fill="#9aa3ae" stroke="#2b1d14" stroke-width="5"/>
+      <circle cx="-11" cy="12" r="4.5" fill="#2b1d14"/><circle cx="11" cy="12" r="4.5" fill="#2b1d14"/>
+    </g>
+    <g id="arrow"><path d="M0 0 L46 0" stroke="#2b1d14" stroke-width="4"/><path d="M46 0 l-10 -6 v12 z" fill="#2b1d14"/><path d="M0 0 l-8 -6 M0 0 l-8 6" stroke="#2b1d14" stroke-width="3"/></g>
+  </defs>
+  <rect width="640" height="360" fill="url(#sky2)"/>
+  <path d="M0 230 Q160 190 320 220 T640 205 V360 H0 Z" fill="#7d8a6a"/>
+  <path d="M0 262 Q200 240 380 258 T640 250 V360 H0 Z" fill="#5e6b4c"/>
+  <!-- arrow rain -->
+  <g opacity=".85">
+    <use href="#arrow" transform="translate(300 40) rotate(28)"/>
+    <use href="#arrow" transform="translate(360 18) rotate(30)"/>
+    <use href="#arrow" transform="translate(420 52) rotate(26)"/>
+    <use href="#arrow" transform="translate(480 22) rotate(31)"/>
+    <use href="#arrow" transform="translate(540 60) rotate(27)"/>
+    <use href="#arrow" transform="translate(250 80) rotate(29)"/>
+    <use href="#arrow" transform="translate(590 30) rotate(30)"/>
+  </g>
+  <!-- distant army -->
+  <g transform="translate(0 0)">
+    <g transform="translate(330 214) scale(.38)"><use href="#k"/></g>
+    <g transform="translate(372 210) scale(.38)"><use href="#k"/></g>
+    <g transform="translate(414 214) scale(.38)"><use href="#k"/></g>
+    <g transform="translate(456 210) scale(.38)"><use href="#k"/></g>
+    <g transform="translate(498 214) scale(.38)"><use href="#k"/></g>
+    <g transform="translate(540 210) scale(.38)"><use href="#k"/></g>
+    <g transform="translate(582 214) scale(.38)"><use href="#k"/></g>
+    <g transform="translate(351 240) scale(.45)"><use href="#k"/></g>
+    <g transform="translate(400 238) scale(.45)"><use href="#k"/></g>
+    <g transform="translate(449 240) scale(.45)"><use href="#k"/></g>
+    <g transform="translate(498 238) scale(.45)"><use href="#k"/></g>
+    <g transform="translate(547 240) scale(.45)"><use href="#k"/></g>
+    <g transform="translate(596 238) scale(.45)"><use href="#k"/></g>
+    <path d="M372 190 v-60" stroke="#2b1d14" stroke-width="4"/><path d="M372 130 h44 l-10 14 l10 14 h-44 z" fill="#b33a2e" stroke="#2b1d14" stroke-width="3"/>
+  </g>
+  <!-- hero knight with shield -->
+  <g transform="translate(160 190) scale(1.25)"><use href="#k"/></g>
+  <path d="M206 214 L270 120" stroke="#cfd6de" stroke-width="9" stroke-linecap="round"/>
+  <path d="M206 214 L270 120" stroke="#2b1d14" stroke-width="2" stroke-linecap="round"/>
+  <path d="M196 226 l26 16" stroke="#2b1d14" stroke-width="7" stroke-linecap="round"/>
+  <path d="M96 222 h48 v34 q0 28 -24 40 q-24 -12 -24 -40 z" fill="#b33a2e" stroke="#2b1d14" stroke-width="5"/>
+  <path d="M120 230 v58 M102 252 h36" stroke="#ffd23f" stroke-width="6"/>
+  <!-- play + title -->
+  <g font-family="Impact, 'Arial Black', sans-serif" font-weight="900" stroke="#120a0a" stroke-linejoin="round">
+    <text x="292" y="312" font-size="46" fill="#120a0a" stroke-width="12">AUTO VIDEO</text>
+    <text x="292" y="344" font-size="24" fill="#120a0a" stroke-width="8">DRAWN 100% IN CODE</text>
+  </g>
+  <g font-family="Impact, 'Arial Black', sans-serif" font-weight="900">
+    <text x="292" y="312" font-size="46" fill="#ffd23f">AUTO VIDEO</text>
+    <text x="292" y="344" font-size="24" fill="#fff">DRAWN 100% IN CODE</text>
+  </g>
+  <g transform="translate(30 26)">
+    <rect width="104" height="30" rx="15" fill="#120a0a"/>
+    <text x="52" y="21" text-anchor="middle" font-family="Arial, sans-serif" font-weight="800" font-size="15" fill="#ffd23f">16:9 · 9:16</text>
+  </g>
+</svg>

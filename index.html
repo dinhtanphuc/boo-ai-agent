@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<title>Boo AI Agent · Skill Claude miễn phí</title>
+<meta name="description" content="Bộ skill Claude miễn phí: viết kịch bản và dựng video tự động." />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23f5b83d'/><text x='50' y='70' font-size='62' text-anchor='middle' font-family='Arial' font-weight='900' fill='%231c1400'>B</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/style.css" />
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js"></script>
+<script src="assets/config.js"></script>
+<script src="assets/skills.js"></script>
+<script src="assets/app.js"></script>
+</head>
+<body>
+<header id="site-header"></header>
+<main class="wrap">
+  <section class="hero">
+    <h1>Skill Claude cho creator</h1>
+    <p>Tải skill, cài vào Claude và bắt đầu viết kịch bản, dựng video tự động. Tạo tài khoản miễn phí để nhận skill.</p>
+  </section>
+  <div class="tabs" role="tablist">
+    <button class="tab active" data-filter="all" role="tab">Tất cả</button>
+    <button class="tab" data-filter="mine" role="tab">Đã nhận</button>
+  </div>
+  <section class="grid" id="grid"></section>
+</main>
+<footer id="site-footer"></footer>
+<script>
+(async function () {
+  const { renderChrome, getClaims, claim, handleClaimParam, esc } = App;
+  await renderChrome();
+  let claims = await getClaims();
+  let filter = "all";
+
+  function card(s) {
+    const owned = claims.has(s.id);
+    const chips = (s.tags || []).map((t, i) => `<span class="chip ${i === 0 ? "strong" : ""}">${esc(t)}</span>`).join("")
+      + (s.duration ? `<span class="chip">${esc(s.duration)}</span>` : "");
+    return `
+      <article class="card">
+        <a class="card-cover" href="skill.html?id=${encodeURIComponent(s.id)}">
+          <img src="${esc(s.cover)}" alt="${esc(s.title)}" loading="lazy" />
+          ${owned ? '<span class="badge">Đã nhận</span>' : ""}
+          ${s.demo ? `<span class="demo-btn" data-demo="${esc(s.demo)}">Xem demo</span>` : ""}
+        </a>
+        <div class="card-body">
+          <div class="card-title"><h3>${esc(s.title)}</h3><span class="lang">${esc(s.lang || "")}</span></div>
+          <p class="card-desc">${esc(s.short)}</p>
+          <div class="chips">${chips}</div>
+          <div class="card-foot">
+            <a class="link-more" href="skill.html?id=${encodeURIComponent(s.id)}">Chi tiết →</a>
+            <button class="btn btn-outline" data-claim="${esc(s.id)}">${owned ? "Tải lại" : "Nhận skill"}</button>
+          </div>
+        </div>
+      </article>`;
+  }
+
+  function render() {
+    const list = SKILLS.filter((s) => filter === "all" || claims.has(s.id));
+    const grid = document.getElementById("grid");
+    grid.innerHTML = list.length ? list.map(card).join("")
+      : `<div class="empty">${filter === "mine" ? "Bạn chưa nhận skill nào." : "Chưa có skill."}</div>`;
+  }
+
+  const opts = { returnTo: "index.html", onClaimed: (id) => { claims.add(id); render(); } };
+
+  document.addEventListener("click", (e) => {
+    const demo = e.target.closest("[data-demo]");
+    if (demo) { e.preventDefault(); window.open(demo.dataset.demo, "_blank", "noopener"); return; }
+    const b = e.target.closest("[data-claim]");
+    if (b) claim(b.dataset.claim, { ...opts, claims });
+    const t = e.target.closest(".tab");
+    if (t) {
+      document.querySelectorAll(".tab").forEach((x) => x.classList.toggle("active", x === t));
+      filter = t.dataset.filter;
+      render();
+    }
+  });
+
+  render();
+  handleClaimParam(opts);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<title>Tạo tài khoản · Boo AI Agent</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23f5b83d'/><text x='50' y='70' font-size='62' text-anchor='middle' font-family='Arial' font-weight='900' fill='%231c1400'>B</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/style.css" />
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js"></script>
+<script src="assets/config.js"></script>
+<script src="assets/skills.js"></script>
+<script src="assets/app.js"></script>
+</head>
+<body>
+<header id="site-header"></header>
+<main class="auth">
+  <div class="auth-box">
+    <h1>Tạo tài khoản</h1>
+    <p class="sub">Miễn phí. Tài khoản này giữ các skill bạn đã nhận.</p>
+    <form id="form" novalidate>
+      <div class="field">
+        <label for="name">Tên của bạn</label>
+        <input class="input" id="name" type="text" autocomplete="name" required />
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input class="input" id="email" type="email" autocomplete="email" placeholder="email@cua-ban.com" required />
+      </div>
+      <div class="field">
+        <label for="password">Mật khẩu</label>
+        <input class="input" id="password" type="password" autocomplete="new-password" placeholder="Ít nhất 8 ký tự" required />
+      </div>
+      <div class="field">
+        <label for="password2">Nhập lại mật khẩu</label>
+        <input class="input" id="password2" type="password" autocomplete="new-password" required />
+      </div>
+      <div class="form-msg" id="msg"></div>
+      <button class="btn btn-primary btn-block" type="submit" id="submit">Tạo tài khoản</button>
+    </form>
+    <p class="auth-alt">Đã có tài khoản? <a id="to-login" href="login.html">Đăng nhập</a></p>
+  </div>
+</main>
+<footer id="site-footer"></footer>
+<script>
+(async function () {
+  const { sb, renderChrome, getUser, safeNext, params, viError } = App;
+  const next = safeNext(params.get("next"));
+  document.getElementById("to-login").href = "login.html?next=" + encodeURIComponent(next);
+  if (await getUser()) { location.replace(next); return; }
+  await renderChrome();
+  setTimeout(() => document.getElementById("name").focus(), 50);
+
+  const msg = document.getElementById("msg");
+  const btn = document.getElementById("submit");
+  const say = (t, ok) => { msg.className = "form-msg " + (ok ? "ok" : "err"); msg.textContent = t; };
+
+  document.getElementById("form").onsubmit = async (e) => {
+    e.preventDefault();
+    if (!sb) return say("Web chưa cấu hình Supabase.");
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const p1 = document.getElementById("password").value;
+    const p2 = document.getElementById("password2").value;
+    if (!name) return say("Nhập tên của bạn.");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return say("Email không hợp lệ.");
+    if (p1.length < 8) return say("Mật khẩu cần ít nhất 8 ký tự.");
+    if (p1 !== p2) return say("Hai mật khẩu không khớp.");
+
+    btn.disabled = true; btn.textContent = "Đang tạo tài khoản…";
+    const { data, error } = await sb.auth.signUp({
+      email, password: p1,
+      options: {
+        data: { full_name: name },
+        emailRedirectTo: new URL("login.html?next=" + encodeURIComponent(next), location.href).href,
+      },
+    });
+    if (error) { say(viError(error)); btn.disabled = false; btn.textContent = "Tạo tài khoản"; return; }
+    if (data.session) { location.replace(next); return; }
+    if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+      say("Email này đã có tài khoản. Hãy đăng nhập.");
+    } else {
+      say("Đã tạo tài khoản. Hãy mở email và bấm link xác nhận, sau đó đăng nhập.", true);
+    }
+    btn.disabled = false; btn.textContent = "Tạo tài khoản";
+  };
+})();
+</script>
+</body>
+</html>

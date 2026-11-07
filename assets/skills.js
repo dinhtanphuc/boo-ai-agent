@@ -1,0 +1,46 @@
+// Danh sách skill hiển thị trên web.
+// Thêm skill mới: thêm 1 khối bên dưới + upload file <id>.zip vào bucket "skills" trên Supabase.
+window.SKILLS = [
+  {
+    id: "kich-ban-squire",
+    title: "Squire – Viết Kịch Bản",
+    lang: "EN",
+    cover: "assets/covers/kich-ban-squire.svg",
+    short: "Bộ skill viết kịch bản YouTube tiếng Anh ngách lịch sử quân sự hoạt hình (hiệp sĩ, La Mã, samurai, Viking, thế chiến) bằng Claude.",
+    tags: ["Kịch bản", "Dài + Short"],
+    duration: "9–11 phút",
+    command: "/kich-ban-squire",
+    features: [
+      "Video dài 16:9 (9–11 phút, khoảng 1.800 từ): giọng “you” nhập vai người lính, mở giữa nguy hiểm, quay về cao trào, câu kết đảo.",
+      "Short 9:16 (60–75 giây, khoảng 200 từ): chuyện một con người có nghịch lý sống còn.",
+      "Kịch bản sẵn sàng thu voice: file voice tách đoạn bằng dấu | để tool TTS cắt tự động.",
+      "Kế hoạch hình cho bộ dựng vẽ bằng code (dùng cùng skill Squire – Dựng Video).",
+      "Gói 10 tiêu đề, 3 phương án thumbnail, mô tả và tag.",
+      "Gợi ý đề tài, có quét kênh đối thủ.",
+    ],
+    works: "Claude.ai, Claude Desktop, Claude Cowork, Claude Code",
+    note: "",
+    demo: "",
+  },
+  {
+    id: "lam-video-squire",
+    title: "Squire – Dựng Video Tự Động",
+    lang: "EN",
+    cover: "assets/covers/lam-video-squire.svg",
+    short: "Bộ skill dựng tự động video lịch sử quân sự hoạt hình 100% bằng code: nhân vật, ngựa, đội hình, bản đồ, nhạc và SFX. Không cần ảnh hay video AI.",
+    tags: ["2D thuần", "Vẽ bằng code"],
+    duration: "9–11 phút",
+    command: "/lam-video-squire",
+    features: [
+      "Nhân vật đầu tròn viền nâu đen, giáp và trang phục theo từng thời đại, ngựa, đội hình đông người.",
+      "Nền mờ sâu, mưa, mưa tên, sơ đồ khối quân nhìn từ trên, bản đồ giấy da, bảng phấn.",
+      "Nhạc nền và SFX tự tạo: ngựa hí, vó ngựa, đấu kiếm, mưa tên, kèn trận.",
+      "Video dài 16:9 không phụ đề, hoặc Short 9:16 phụ đề 1–3 chữ.",
+      "Thumbnail vẽ bằng code.",
+      "Dựng bản cuối bằng card đồ hoạ trên máy Windows hoặc trên cloud.",
+    ],
+    works: "Claude Cowork, Claude Code (khuyên dùng)",
+    note: "Skill này cần Node.js, Python, ffmpeg và Chromium để dựng video, nên chạy tốt nhất trong Claude Cowork hoặc Claude Code. Lần đầu dùng, skill tự hướng dẫn cài các phần này.",
+    demo: "",
+  },
+];

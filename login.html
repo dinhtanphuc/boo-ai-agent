@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<title>Đăng nhập · Boo AI Agent</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23f5b83d'/><text x='50' y='70' font-size='62' text-anchor='middle' font-family='Arial' font-weight='900' fill='%231c1400'>B</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/style.css" />
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js"></script>
+<script src="assets/config.js"></script>
+<script src="assets/skills.js"></script>
+<script src="assets/app.js"></script>
+</head>
+<body>
+<header id="site-header"></header>
+<main class="auth">
+  <div class="auth-box">
+    <h1>Đăng nhập</h1>
+    <p class="sub" id="sub">Đăng nhập để nhận skill và xem các skill bạn đã nhận.</p>
+    <form id="form" novalidate>
+      <div class="field">
+        <label for="email">Email</label>
+        <input class="input" id="email" type="email" autocomplete="email" placeholder="email@cua-ban.com" required />
+      </div>
+      <div class="field">
+        <label for="password">Mật khẩu</label>
+        <input class="input" id="password" type="password" autocomplete="current-password" placeholder="Mật khẩu của bạn" required />
+      </div>
+      <div class="row-between"><button type="button" class="link-btn" id="forgot">Quên mật khẩu?</button></div>
+      <div class="form-msg" id="msg"></div>
+      <button class="btn btn-primary btn-block" type="submit" id="submit">Đăng nhập</button>
+    </form>
+    <p class="auth-alt">Chưa có tài khoản? <a id="to-signup" href="signup.html">Tạo tài khoản</a></p>
+  </div>
+</main>
+<footer id="site-footer"></footer>
+<script>
+(async function () {
+  const { sb, renderChrome, getUser, safeNext, params, viError } = App;
+  const next = safeNext(params.get("next"));
+  document.getElementById("to-signup").href = "signup.html?next=" + encodeURIComponent(next);
+  if (params.get("claim") || /claim=/.test(next)) {
+    document.getElementById("sub").textContent = "Bạn cần đăng nhập để nhận skill. Chưa có tài khoản? Tạo miễn phí ở bên dưới.";
+  }
+  if (await getUser()) { location.replace(next); return; }
+  await renderChrome();
+
+  const msg = document.getElementById("msg");
+  const btn = document.getElementById("submit");
+  const say = (t, ok) => { msg.className = "form-msg " + (ok ? "ok" : "err"); msg.textContent = t; };
+
+  document.getElementById("form").onsubmit = async (e) => {
+    e.preventDefault();
+    if (!sb) return say("Web chưa cấu hình Supabase.");
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    if (!email || !password) return say("Nhập email và mật khẩu.");
+    btn.disabled = true; btn.textContent = "Đang đăng nhập…";
+    const { error } = await sb.auth.signInWithPassword({ email, password });
+    if (error) { say(viError(error)); btn.disabled = false; btn.textContent = "Đăng nhập"; return; }
+    location.replace(next);
+  };
+
+  document.getElementById("forgot").onclick = async () => {
+    if (!sb) return say("Web chưa cấu hình Supabase.");
+    const email = document.getElementById("email").value.trim();
+    if (!email) return say("Nhập email ở trên rồi bấm Quên mật khẩu.");
+    const { error } = await sb.auth.resetPasswordForEmail(email, {
+      redirectTo: new URL("reset.html", location.href).href,
+    });
+    if (error) return say(viError(error));
+    say("Đã gửi email đặt lại mật khẩu. Hãy kiểm tra hộp thư (cả mục Spam).", true);
+  };
+})();
+</script>
+</body>
+</html>
