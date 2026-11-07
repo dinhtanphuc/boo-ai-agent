@@ -5,7 +5,7 @@
 <meta name="description" content="Bộ skill Claude miễn phí: viết kịch bản và dựng video tự động." />
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23f5b83d'/><text x='50' y='70' font-size='62' text-anchor='middle' font-family='Arial' font-weight='900' fill='%231c1400'>B</text></svg>" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%238b7bff'/><text x='50' y='70' font-size='62' text-anchor='middle' font-family='Arial' font-weight='900' fill='%23ffffff'>B</text></svg>" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -19,12 +19,16 @@
 <header id="site-header"></header>
 <main class="wrap">
   <section class="hero">
+    <span class="eyebrow">✨ Miễn phí · Cài vào Claude trong 1 phút</span>
     <h1>Skill Claude cho creator</h1>
     <p>Tải skill, cài vào Claude và bắt đầu viết kịch bản, dựng video tự động. Tạo tài khoản miễn phí để nhận skill.</p>
   </section>
-  <div class="tabs" role="tablist">
-    <button class="tab active" data-filter="all" role="tab">Tất cả</button>
-    <button class="tab" data-filter="mine" role="tab">Đã nhận</button>
+  <div class="toolbar">
+    <div class="tabs" role="tablist">
+      <button class="tab active" data-filter="all" role="tab">Tất cả</button>
+      <button class="tab" data-filter="mine" role="tab">Đã nhận</button>
+    </div>
+    <input class="search" id="search" type="search" placeholder="Tìm skill..." aria-label="Tìm skill" />
   </div>
   <section class="grid" id="grid"></section>
 </main>
@@ -35,6 +39,7 @@
   await renderChrome();
   let claims = await getClaims();
   let filter = "all";
+  let q = "";
 
   function card(s) {
     const owned = claims.has(s.id);
@@ -60,11 +65,21 @@
   }
 
   function render() {
-    const list = SKILLS.filter((s) => filter === "all" || claims.has(s.id));
+    const list = SKILLS.filter((s) => (filter === "all" || claims.has(s.id))
+      && (!q || [s.title, s.short, ...(s.tags || [])].join(" ").toLowerCase().includes(q)));
     const grid = document.getElementById("grid");
     grid.innerHTML = list.length ? list.map(card).join("")
-      : `<div class="empty">${filter === "mine" ? "Bạn chưa nhận skill nào." : "Chưa có skill."}</div>`;
+      : `<div class="empty">${q ? "Không tìm thấy skill phù hợp." : filter === "mine" ? "Bạn chưa nhận skill nào." : "Chưa có skill."}</div>`;
   }
+
+  document.getElementById("search").addEventListener("input", (e) => { q = e.target.value.trim().toLowerCase(); render(); });
+  document.addEventListener("mousemove", (e) => {
+    const c = e.target.closest(".card");
+    if (!c) return;
+    const r = c.getBoundingClientRect();
+    c.style.setProperty("--mx", (e.clientX - r.left) + "px");
+    c.style.setProperty("--my", (e.clientY - r.top) + "px");
+  });
 
   const opts = { returnTo: "index.html", onClaimed: (id) => { claims.add(id); render(); } };
 
