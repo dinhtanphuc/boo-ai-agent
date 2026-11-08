@@ -25,7 +25,7 @@ supabase/functions/claim-skill/index.ts   Hàm kiểm tra mật khẩu và cấp
 ## Cài đặt Supabase (một lần)
 
 1. **Chạy SQL:** SQL Editor → New query → dán nội dung `supabase/setup.sql` → Run.
-2. **Upload file skill:** Storage → bucket `skills` → Upload file `kich-ban-squire.zip`, `lam-video-squire.zip`, `lich-su-the-gioi.zip`, `hoat-hinh-lich-su.zip` (2 file sau là plugin: 1 file zip chứa 2 skill, khai báo `type: "plugin"` trong `assets/skills.js`).
+2. **Upload file skill:** Storage → bucket `skills` → Upload file `kich-ban-squire.zip`, `lam-video-squire.zip`, `lich-su-the-gioi.zip`, `hoat-hinh-lich-su.zip`, `selfimprove-phim-ngan.zip`, `teisetsu-thechien.zip` (4 file sau là plugin: 1 file zip chứa 2 skill, khai báo `type: "plugin"` trong `assets/skills.js`).
    Tên file phải trùng `id` trong `assets/skills.js`.
 3. **Tạo Edge Function:** Edge Functions → Deploy a new function → Via Editor.
    Đặt tên `claim-skill`, dán nội dung `supabase/functions/claim-skill/index.ts`, rồi Deploy.
